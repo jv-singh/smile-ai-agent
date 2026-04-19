@@ -22,10 +22,34 @@ import json
 import subprocess
 import sys
 import requests
+import os as _os
 
 # --- Configuration ---
-import os as _os
-_REPO_ROOT = r"C:\Users\Singh\Desktop\lpi-work\lpi-developer-kit"
+def find_lpi_server():
+    """Auto-discovers the LPI server path for local, bot, or reviewer environments."""
+    
+    # 1. Check if user/bot explicitly set the environment variable
+    if "LPI_PATH" in _os.environ:
+        return _os.environ["LPI_PATH"]
+    
+    # 2. Check relative paths (Standard CI/CD Bot behavior - repos cloned side-by-side)
+    current_dir = _os.path.dirname(_os.path.abspath(__file__))
+    possible_paths = [
+        _os.path.abspath(_os.path.join(current_dir, "..", "lpi-developer-kit")), # Adjacent folder
+        _os.path.abspath(_os.path.join(current_dir, "lpi-developer-kit")),       # Inside current folder
+        # 3. Fallback for your local Windows machine
+        r"C:\Users\Singh\Desktop\lpi-work\lpi-developer-kit"
+    ]
+
+    for path in possible_paths:
+        if _os.path.exists(_os.path.join(path, "dist", "src", "index.js")):
+            return path
+
+    print("[ERROR] Could not auto-discover LPI server.")
+    print("Reviewer/Bot: Please set the LPI_PATH environment variable to point to your lpi-developer-kit folder.")
+    sys.exit(1)
+
+_REPO_ROOT = find_lpi_server()
 LPI_SERVER_CMD = ["node", _os.path.join(_REPO_ROOT, "dist", "src", "index.js")]
 LPI_SERVER_CWD = _REPO_ROOT  # always resolves to repo root regardless of where you run from
 OLLAMA_URL = "http://localhost:11434/api/generate"
