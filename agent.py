@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 LPI Sandbox Agent — Example Level 3 Submission (Final Boss Edition)
 Includes A2A Agent Card broadcasting and deep error handling.
@@ -9,6 +10,25 @@ import subprocess
 import sys
 import requests
 import os as _os
+
+def dynamic_tool_selector(query: str) -> list:
+    """
+    Simulates dynamic tool selection based on query intent.
+    Matches the required structural routing from the Level 3 blueprint.
+    """
+    query = query.lower()
+    tools = []
+    if "how" in query or "implement" in query:
+        tools.extend(["get_methodology_step", "get_insights"])
+    if "example" in query or "case" in query:
+        tools.append("get_case_studies")
+    if "what" in query or "explain" in query or "overview" in query:
+        tools.append("smile_overview")
+    
+    if "get_insights" not in tools:
+        tools.append("get_insights")
+        
+    return list(set(tools))
 
 # --- Configuration & Smart Pathing ---
 def find_lpi_server():
