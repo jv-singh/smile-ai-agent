@@ -1,0 +1,18 @@
+# ------------------------------------------
+# Core Agent Dependencies
+# ------------------------------------------
+requests==2.31.0               # For HTTP communication with LPI tools
+python-dotenv==1.0.1           # For secure environment variable management
+
+# ------------------------------------------
+# Evaluation & Testing (Reproducibility)
+# ------------------------------------------
+pytest==8.0.0                  # For unit and integration testing
+pytest-cov==4.1.0              # For test coverage reporting (CI/CD integration)
+
+# ------------------------------------------
+# Security & Code Quality (Enterprise Standards)
+# ------------------------------------------
+black==24.2.0                  # Strict code formatting
+flake8==7.0.0                  # Static code analysis and linting
+bandit==1.7.7                  # Security vulnerability scanner for Python
